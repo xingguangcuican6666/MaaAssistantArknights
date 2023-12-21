@@ -3918,7 +3918,7 @@ namespace MaaWpfGui.ViewModels.UI
         private void UpdateRoguelikeCoreCharList()
         {
             var filePath = $"resource/roguelike/{RoguelikeTheme}/recruitment.json";
-            if (File.Exists(filePath) is false)
+            if (!File.Exists(filePath))
             {
                 RoguelikeCoreCharList.Clear();
                 return;
@@ -3940,16 +3940,22 @@ namespace MaaWpfGui.ViewModels.UI
 
                     foreach (var operItem in opersArray)
                     {
-                        var isStart = (bool?)operItem.SelectToken("is_start") ?? false;
+                        var isStart = (bool?)operItem["is_start"] ?? false;
                         if (!isStart)
                         {
                             continue;
                         }
 
-                        var name = (string)operItem.SelectToken("name");
-                        if (!string.IsNullOrEmpty(name))
+                        var name = (string)operItem["name"];
+                        if (string.IsNullOrEmpty(name))
                         {
-                            roguelikeCoreCharList.Add(name);
+                            continue;
+                        }
+
+                        var localizedName = DataHelper.GetLocalizedCharacterName(name, _language);
+                        if (!string.IsNullOrEmpty(localizedName))
+                        {
+                            roguelikeCoreCharList.Add(localizedName);
                         }
                     }
                 }
