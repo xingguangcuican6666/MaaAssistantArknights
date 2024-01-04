@@ -18,7 +18,7 @@ jobs:
       GH_TOKEN: ${{ secrets.MISTEOWORKFLOW }}
     steps:
       - name: Checkout MAA
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.1.1
         with:
           show-progress: false
           token: ${{ secrets.MISTEOWORKFLOW }}
@@ -30,14 +30,14 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v1
+        uses: microsoft/setup-msbuild@v1.3.1
 
       - name: Build Resource Updater
         run: |
           MSBUILD tools/ResourceUpdater/ResourceUpdater.vcxproj /t:rebuild /p:Configuration="Release" /p:Platform="x64" /p:BuildProjectReferences=false /m
 
       - name: Clone ArknightsGameResource for Official
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.1.1
         with:
           show-progress: false
           repository: yuanyan3060/ArknightsGameResource
@@ -57,7 +57,7 @@ jobs:
           sparse-checkout-cone-mode: false
 
       - name: Clone ArknightsGameResource_Yostar for Overseas
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.1.1
         with:
           show-progress: false
           repository: Kengxxiao/ArknightsGameData_YoStar
@@ -88,7 +88,7 @@ jobs:
           sparse-checkout-cone-mode: false
 
       - name: Clone arknights-toolbox-update for Taiwan
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.1.1
         with:
           show-progress: false
           repository: arkntools/arknights-toolbox-update
@@ -141,7 +141,7 @@ jobs:
 
       - name: Cancelling
         if: steps.check_only_sorted.outputs.only_sorted == 'True'
-        uses: andymckay/cancel-action@0.3
+        uses: styfle/cancel-workflow-action@0.12.0
 
       - name: Add files to git
         if: steps.check_only_sorted.outputs.only_sorted != 'True'
@@ -168,7 +168,7 @@ jobs:
 
       - name: Cancelling
         if: steps.add_files.outputs.have_commits != 'True'
-        uses: andymckay/cancel-action@0.3
+        uses: styfle/cancel-workflow-action@0.12.0
 
       - name: Push changes # push the output folder to your repo
         if: steps.add_files.outputs.have_commits == 'True'
